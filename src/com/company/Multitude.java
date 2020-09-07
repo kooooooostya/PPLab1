@@ -5,7 +5,7 @@ import java.util.Objects;
 
 public class Multitude{
 
-     private LinkedHashSet<Object> mMultitudeSet;
+     private final LinkedHashSet<Object> mMultitudeSet;
 
      public Multitude() {
           this.mMultitudeSet = new LinkedHashSet<>();
@@ -15,7 +15,9 @@ public class Multitude{
           this.mMultitudeSet = mMultitudeSet;
      }
 
-
+     public LinkedHashSet<Object> getMultitudeSet() {
+          return mMultitudeSet;
+     }
 
      public void addToMultitude(Object o){
           mMultitudeSet.add(o);
@@ -31,22 +33,16 @@ public class Multitude{
      }
 
      // Возвращает true если все окк
-     public boolean deleteItem(int index){
-          if(index < getSize()){
-               mMultitudeSet.remove(index);
-               return true;
-          }
-          return false;
+     public boolean deleteItem(Object o){
+          return  mMultitudeSet.remove(o);
      }
 
      // проверяет сузествует ли элемент во множестве
-     //TODO text this dich
      public boolean isConsistObject(Object o){
           return mMultitudeSet.contains(o);
      }
 
      // обьеденение множество, возвращает новое множество
-     //TODO test
      public Multitude union(Multitude multitude){
           LinkedHashSet<Object> unitedSet = new LinkedHashSet<>();
           unitedSet.addAll(this.mMultitudeSet);
@@ -56,7 +52,6 @@ public class Multitude{
      }
 
      // Возвращяет новое множнство составленое из пересечения множеств
-     //TODO test
      public Multitude intersection(Multitude multitude){
           LinkedHashSet<Object> intersectionSet = new LinkedHashSet<>();
           for(Object o : multitude.mMultitudeSet){
@@ -86,7 +81,6 @@ public class Multitude{
 
      public Multitude booleanMultiple() {
           Multitude result = new Multitude();
-          //int sizeNewMultitude = (int) Math.pow(2, this.getSize());
 
           for (int i = 0; i <= this.getSize(); i++) {
 
@@ -95,16 +89,15 @@ public class Multitude{
                     neededNums[q] = q;
                }
 
-
                boolean isContinue = true;
                while (isContinue) {
                     //сдесь должен быть код который добавлянт item если он в neededNums и изменять neededNums
                     LinkedHashSet<Object> objectLinkedHashSet = new LinkedHashSet<>();
-                    for (int j = 0; j < neededNums.length; j++) {
-                         objectLinkedHashSet.add(this.mMultitudeSet.toArray()[neededNums[j]]);
+                    for (int neededNum : neededNums) {
+                         objectLinkedHashSet.add(this.mMultitudeSet.toArray()[neededNum]);
                     }
                     isContinue = checkIsOverflow(neededNums);
-                    neededNums = getIncreasedNums(neededNums);
+                    getIncreasedNums(neededNums);
 
                     result.addToMultitude(new Multitude(objectLinkedHashSet));
 
@@ -113,11 +106,10 @@ public class Multitude{
 
           }
           return result;
-          //TODO бописать все
      }
 
-     private int[] getIncreasedNums(int[] neededNum) {
-          if (neededNum.length == 0) return neededNum;
+     private void getIncreasedNums(int[] neededNum) {
+          if (neededNum.length == 0) return;
           for(int i = neededNum.length - 1; i >= 0; i--){
                if (neededNum[i] < this.getSize() - 1){
                     neededNum[i]++;
@@ -129,12 +121,11 @@ public class Multitude{
                          }
 
                     }
-                    return neededNum;
+                    return;
                }
           }
 
 
-          return neededNum;
      }
 
      private boolean checkIsOverflow(int[] numArray) {
@@ -149,7 +140,6 @@ public class Multitude{
      }
 
 
-     // TODO test this dish
      @Override
      public boolean equals(Object o) {
           if (this == o) return true;
